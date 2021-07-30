@@ -1,2 +1,8 @@
 <!--blog/apps/templates/index.html-->
 <h1>Flying Andrew</h1>
+{%if user.is_authenticated%}
+    What s up <b>{{ user.username }}</b> coming your weird best firend !!!
+    <a href="/accounts/logout">Log Out</a>
+{% else %}
+    <a href="/accounts/login">Log In</a>
+{% endif %}
