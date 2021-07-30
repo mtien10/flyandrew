@@ -22,4 +22,4 @@ def register(request):
 
 def login(request):
     return render(request, 'registration/login.html')
-# Create your views here.
+# Create your views here ok.
