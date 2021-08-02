@@ -15,6 +15,8 @@ def register(request):
                                 password=request.POST['password1'])
             auth_login(request, user)
             return redirect('home')
+        else:
+            print(form.errors)
 
     context = {'form': form}
     return render(request, 'registration/register.html', context)
