@@ -1,0 +1,15 @@
+<!--blog/apps/templates/staff/order/list.html-->
+{% extends "../base.html" %}
+
+{% block navbar %}
+    {% with page=3 %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h3>Order LIST</h3>
+        <a class="btn btn-primary" href="/staff/view-order/<pk>">Details Order</a>
+    </div>
+{% endblock %}

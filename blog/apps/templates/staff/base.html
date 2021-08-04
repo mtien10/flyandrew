@@ -1,4 +1,4 @@
-<!--blog/apps/templates/base.html-->
+<!--blog/apps/templates/staff/base.html-->
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -7,9 +7,9 @@
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0">
   <div class="navbar-nav">
-    <a class="nav-item nav-link active {% if page == 1 %} active {% endif %}" href="/">Trang chu</a>
-    <a class="nav-item nav-link {% if page == 2 %} active {% endif %}" href="/page2">Who am I</a>
-    <a class="nav-item nav-link" href="#">Tab 3</a>
+    <a class="nav-item nav-link active {% if page == 1 %} active {% endif %}" href="/staff">Shop All </a>
+    <a class="nav-item nav-link {% if page == 2 %} active {% endif %}" href="/staff/list-product">ITEMS</a>
+    <a class="nav-item nav-link {% if page == 3 %} active {% endif %}" href="/staff/list-order">ORDER</a>
   </div>
 
   <ul class="navbar-nav ml-auto">

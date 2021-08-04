@@ -1,0 +1,61 @@
+<!--blog/apps/templates/staff/category/list.html-->
+{% extends "../base.html" %}
+
+{% block navbar %}
+    {% with page=1 %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <h3>PRODUCTS GROUP LIST</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr class="text-center">
+                    <th style= "width:5%">STT</th>
+                    <th style= "width:35%">Code</th>
+                    <th style= "width:40%">Name</th>
+                    <th style= "width:20%"></th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+        {% if not categoryList %}
+          <tr>
+            <td colspan="4">Không có nhóm sản phẩm nào</td>
+          </tr>
+        {% endif %}
+        {% for c in categoryList %}
+          <tr>
+            <td class="text-center">{{forloop.counter}}</td>
+            <td>{{c.code}}</td>
+            <td>{{c.name}}</td>
+            <td class="text-center">
+              <a class="btn btn-secondary" href="/staff/update-category/{{c.id}}">Chỉnh sửa</a>
+              <a class="btn btn-danger" href="javascript:deleteItem({{c.id}})">Xóa</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+        </table>
+        <a class="btn btn-primary" href="/staff/create-category">Add Group Items</a>
+    </div>
+    <script>
+    async function deleteItem(id) {
+      if(confirm("Bạn có muốn xóa nhóm sản phẩm này?")) {
+        var url = '/staff/delete-category/' + id;
+        var token = '{{csrf_token}}';
+        var headers = {'X-CSRFToken': token};
+        var resp = await fetch(url, {method: 'POST', headers: headers});
+        var result = await resp.json();
+        if(result.success) {
+          location.reload();
+        }else {
+          alert('Lỗi xảy ra:' + result.error);
+        }
+      }
+    }
+  </script>
+{% endblock %}
