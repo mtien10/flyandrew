@@ -1,30 +1,30 @@
 <!--blog/apps/templates/staff/product/list.html-->
 {% extends "../base.html" %}
 
-{% block navbar %}
-    {% with page=2 %}
-        {{ block.super }}
-    {% endwith %}
-{% endblock %}
+{%block navbar%}
+  {% with page=2 %}
+    {{block.super}}
+  {% endwith %}
+{%endblock%}
 
 {% block content %}
-    <div class="container mt-3">
-        <h3>PRODUCTS LIST</h3>
-        <table class="table table-bordered">
-            <thead>
-                <tr class="text-center">
-                    <th style= "width:5%">STT</th>
-                    <th style= "width:35%">Code</th>
-                    <th style= "width:40%">Name</th>
-                    <th style= "width:20%"></th>
-
-                </tr>
-            </thead>
-
-            <tbody>
+  <div class="container mt-3">
+    <h4>Danh sách sản phẩm</h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr class="text-center">
+          <th style="width:5%">STT</th>
+          <th style="width:15%">Mã</th>
+          <th style="width:20%">Tên</th>
+          <th style="width:15%">Đơn giá</th>
+          <th style="width:25%">Ảnh</th>
+          <th style="width:20%"></th>
+        </tr>
+      </thead>
+      <tbody>
         {% if not productList %}
           <tr>
-            <td colspan="4">Không có sản phẩm nào</td>
+            <td colspan="6">Không có sản phẩm nào</td>
           </tr>
         {% endif %}
         {% for p in productList %}
@@ -32,6 +32,10 @@
             <td class="text-center">{{forloop.counter}}</td>
             <td>{{p.code}}</td>
             <td>{{p.name}}</td>
+            <td class="text-center">{{p.price}}</td>
+            <td class="text-center">
+              <img style="width: 90%; max-height: 200px;" src="/{{p.image}}">
+            </td>
             <td class="text-center">
               <a class="btn btn-secondary" href="/staff/update-product/{{p.id}}">Chỉnh sửa</a>
               <a class="btn btn-danger" href="javascript:deleteItem({{p.id}})">Xóa</a>
@@ -39,10 +43,12 @@
           </tr>
         {% endfor %}
       </tbody>
-        </table>
-        <a class="btn btn-primary" href="/staff/create-product">Add Items</a>
-    </div>
-    <script>
+    </table>
+    <a class="btn btn-primary" href="/staff/create-product">
+      Thêm sản phẩm
+    </a>
+  </div>
+  <script>
     async function deleteItem(id) {
       if(confirm("Bạn có muốn xóa sản phẩm này?")) {
         var url = '/staff/delete-product/' + id;
