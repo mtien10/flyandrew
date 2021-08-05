@@ -56,18 +56,19 @@ def listProduct(request):
     context = {'productList': productList}
     return render(request, 'staff/product/list.html', context)
 
+
 class ProductCreateView(CreateView):
     model = Product
     fields = '__all__'
     template_name = 'staff/product/form.html'
-    success_url =  '/staff/list-product'
+    success_url = '/staff/list-product'
 
 
 class ProductUpdateView(UpdateView):
     model = Product
     fields = '__all__'
     template_name = 'staff/product/form.html'
-    success_url =  '/staff/list-product'
+    success_url = '/staff/list-product'
 
 
 def deleteProduct(request, pk):
@@ -85,7 +86,6 @@ def deleteProduct(request, pk):
 
     result = {'success': success, 'errors': error}
     return HttpResponse(json.dumps(result), content_type='application/json')
-
 
 
 # Order
