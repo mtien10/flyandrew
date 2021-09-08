@@ -10,6 +10,94 @@
 {% block content %}
     <div class="container mt-3">
         <h3>Order Information</h3>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Customer Name : </th>
+                    <td>{{ order.customerName }}</td>
+                </tr>
+                <tr>
+                    <th>Customer Phone :</th>
+                    <td>{{ order.customerPhone }}</td>
+                </tr>
+                <tr>
+                    <th>Customer Address :</th>
+                    <td>{{ order.customerAddress}}</td>
+                </tr>
+                <tr>
+                    <th>Product :</th>
+                    <td>{{ order.product.name}}</td>
+                </tr>
+                <tr>
+                    <th>Qualtity :</th>
+                    <td>{{ order.qty}}</td>
+                </tr>
+                <tr>
+                    <th>Price :</th>
+                    <td>{{ order.priceUnit}} $</td>
+                </tr>
+                <tr>
+                    <th>Total:</th>
+                    <td>{{ order.total}} $</td>
+                </tr>
+                <tr>
+                    <th>OrderDate :</th>
+                    <td>{{order.orderDate|date:"d/m/Y H:i"}}</td>
+                </tr>
+                {% if order.status == 1 %}
+                    <tr>
+                        <th>Deliver Date :</th>
+                        <td>{{order.deliverDate|date:"d/m/Y H:i"}}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Status :</th>
+                    <td>
+                        {%if order.status == 0 %} Đang chờ giao hàng {%endif%}
+                        {%if order.status == 1 %} Đã giao hàng {%endif%}
+                        {%if order.status == 2 %} Đã hủy {%endif%}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <a class="btn btn-secondary" href="/staff/list-order">Back</a>
+        {% if order.status == 0 %}
+            <button class="btn btn-primary" type="button" onclick="confirmOrderDelivered()">
+                Package Done Delivered
+            </button>
+            <button class="btn btn-danger" type="button" onclick="cancelOrder()">
+                Cancel Order
+            </button>
+        {% endif %}
     </div>
+    <script>
+        async function confirmOrderDelivered(){
+            if(confirm('Confirm Order Delivered')){
+                var url = '/staff/confirm-order-delivered/{{ order.id }}';
+                var token = '{{csrf_token}}';
+                var headers = {'X-CSRFToken': token};
+                var resp = await fetch(url, {method: 'POST', headers: headers});
+                var result = await resp.json();
+                if(result.success) {
+                  location.href = '/staff/list-order';
+                }else {
+                  alert('Lỗi xảy ra:' + result.error);
+                }
+            }
+        }
+        async function cancelOrder(){
+            if(confirm('Cancel Order')){
+                var url = '/staff/cancel-order/{{ order.id }}';
+                var token = '{{csrf_token}}';
+                var headers = {'X-CSRFToken': token};
+                var resp = await fetch(url, {method: 'POST', headers: headers});
+                var result = await resp.json();
+                if(result.success) {
+                  location.href = '/staff/list-order';
+                }else {
+                  alert('Lỗi xảy ra:' + result.error);
+                }
+            }
+        }
+    </script>
 {% endblock %}

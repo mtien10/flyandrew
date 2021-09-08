@@ -20,7 +20,8 @@ from blog.account.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog.apps.urls')),
+    path('staff/', include('blog.apps.urls_staff')),
+    path('', include('blog.apps.urls_enduser')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register', register),
 

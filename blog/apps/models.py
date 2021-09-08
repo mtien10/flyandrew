@@ -11,7 +11,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category,on_delete=models.PROTECT)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     code = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=200)
     price = models.IntegerField()
@@ -20,4 +20,21 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+class Order(models.Model):
+    class Status:
+        PENDING = 0
+        DELIVERED = 1
+        CANCELLED = 2
+
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    qty = models.IntegerField()
+    priceUnit = models.IntegerField()
+    total = models.IntegerField()
+    customerName = models.CharField(max_length=50)
+    customerPhone = models.CharField(max_length=20)
+    customerAddress = models.CharField(max_length=200)
+    orderDate = models.DateTimeField()
+    deliverDate = models.DateTimeField(null=True)
+    status = models.IntegerField()
 

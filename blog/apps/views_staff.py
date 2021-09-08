@@ -1,10 +1,13 @@
 import json
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
 
 
 @login_required
@@ -13,26 +16,28 @@ def index(request):
 
 
 # Category
+@login_required
 def listCategory(request):
     categoryList = Category.objects.all()
     context = {'categoryList': categoryList}
     return render(request, 'staff/category/list.html', context)
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     fields = '__all__'
     template_name = 'staff/category/form.html'
     success_url = '/staff'
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     fields = '__all__'
     template_name = 'staff/category/form.html'
     success_url = '/staff'
 
 
+@login_required
 def deleteCategory(request, pk):
     error = ''
     success = False
@@ -51,26 +56,28 @@ def deleteCategory(request, pk):
 
 
 # Product
+@login_required
 def listProduct(request):
     productList = Product.objects.all()
     context = {'productList': productList}
     return render(request, 'staff/product/list.html', context)
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     fields = '__all__'
     template_name = 'staff/product/form.html'
     success_url = '/staff/list-product'
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     fields = '__all__'
     template_name = 'staff/product/form.html'
     success_url = '/staff/list-product'
 
 
+@login_required
 def deleteProduct(request, pk):
     error = ''
     success = False
@@ -89,9 +96,53 @@ def deleteProduct(request, pk):
 
 
 # Order
+@login_required
 def listOrder(request):
-    return render(request, 'staff/order/list.html')
+    orderList = Order.objects.all()
+    context = {'orderList': orderList}
+    return render(request, 'staff/order/list.html', context)
 
 
+@login_required
 def viewOrder(request, pk):
-    return render(request, 'staff/order/view_detail.html')
+    order = get_object_or_404(Order, pk=pk)
+    context = {'order': order}
+    return render(request, 'staff/order/view_detail.html', context)
+
+
+@login_required
+def confirmOrderDelivered(request, pk):
+    error = ''
+    success = False
+    if request.method == 'POST':
+        try:
+            order = get_object_or_404(Order, pk=pk)
+            order.status = Order.Status.DELIVERED
+            order.deliverDate = datetime.now()
+            order.save()
+            success = True
+        except Exception as e:
+            error = str(e)
+    else:
+        error = 'Method not allow'
+
+    result = {'success': success, 'errors': error}
+    return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+def cancelOrder(request, pk):
+    error = ''
+    success = False
+    if request.method == 'POST':
+        try:
+            order = get_object_or_404(Order, pk=pk)
+            order.status = Order.Status.CANCELLED
+            order.save()
+            success = True
+        except Exception as e:
+            error = str(e)
+    else:
+        error = 'Method not allow'
+
+    result = {'success': success, 'errors': error}
+    return HttpResponse(json.dumps(result), content_type='application/json')
