@@ -2,7 +2,7 @@ from django.urls import path
 from .view_enduser import *
 
 urlpatterns = [
-    path('', index),
+    path('', index, name='home'),
     path('view-product/<pk>', view_product),
     path('order-product/<pk>', order_product),
     path('thank-you', thank_you),
